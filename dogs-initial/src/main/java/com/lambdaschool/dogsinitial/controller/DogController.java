@@ -15,25 +15,31 @@ import java.util.ArrayList;
 
 @RestController
 @RequestMapping("/dogs")
-public class DogController
-{
+public class DogController {
     // localhost:8080/dogs/dogs
     @GetMapping(value = "/dogs")
-    public ResponseEntity<?> getAllDogs()
-    {
+    public ResponseEntity<?> getAllDogs() {
         return new ResponseEntity<>(DogsinitialApplication.ourDogList.dogList, HttpStatus.OK);
     }
 
     // localhost:8080/dogs/{id}
     @GetMapping(value = "/{id}")
-    public ResponseEntity<?> getDogDetail(@PathVariable long id)
-    {
+    public ResponseEntity<?> getDogDetail(
+            @PathVariable
+                    long id) {
 
-        Dog rtnDog;
-        if(DogsinitialApplication.ourDogList.findDog(d -> (d.getId() == id))== null){
-            throw new ResourceNotFoundException("The dog with the id of "+ id + " does not exist");
-        } else{
-            rtnDog = DogsinitialApplication.ourDogList.findDog(d -> (d.getId() == id));
+        Dog
+                rtnDog;
+        if (DogsinitialApplication.ourDogList.findDog(d -> (d.getId() ==
+                id)) ==
+                null) {
+            throw new ResourceNotFoundException("The dog with the id of " +
+                    id +
+                    " does not exist");
+        } else {
+            rtnDog =
+                    DogsinitialApplication.ourDogList.findDog(d -> (d.getId() ==
+                            id));
         }
 
         return new ResponseEntity<>(rtnDog, HttpStatus.OK);
@@ -41,17 +47,32 @@ public class DogController
 
     // localhost:8080/dogs/breeds/{breed}
     @GetMapping(value = "/breeds/{breed}")
-    public ResponseEntity<?> getDogBreeds (@PathVariable String breed)
-    {
-        ArrayList<Dog> rtnDogs = DogsinitialApplication.ourDogList.
-                findDogs(d -> d.getBreed().toUpperCase().equals(breed.toUpperCase()));
+    public ResponseEntity<?> getDogBreeds(
+            @PathVariable
+                    String breed) {
+        ArrayList<Dog>
+                rtnDogs =
+                DogsinitialApplication.ourDogList.
+                        findDogs(d -> d.getBreed().toUpperCase().equals(breed.toUpperCase()));
         return new ResponseEntity<>(rtnDogs, HttpStatus.OK);
     }
+
     @GetMapping(value = "/dogtable")
-    public ModelAndView showDogTable(){
-        ModelAndView mav = new ModelAndView();
+    public ModelAndView showDogTable() {
+        ModelAndView
+                mav =
+                new ModelAndView();
         mav.setViewName("dogs");
         mav.addObject("dogList", DogsinitialApplication.ourDogList.dogList);
+        return mav;
+    }
+
+    @GetMapping(value = "/error")
+    public ModelAndView errorPage() {
+        ModelAndView
+                mav =
+                new ModelAndView();
+        mav.setViewName("error");
         return mav;
     }
 }
